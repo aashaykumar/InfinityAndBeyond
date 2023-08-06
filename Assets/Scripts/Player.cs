@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
         avatarRotation = 0f;
         systemRotation = 0f;
         worldRotation = 0f;
+        gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
         acceleration = Accelerations[accelerationMode];
         velocity = StartVelocity;
         currentPipe = PlayerPipeSystem.SetupFirstPipe();

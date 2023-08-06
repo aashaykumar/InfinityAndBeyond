@@ -18,4 +18,9 @@ public class MainMenu : MonoBehaviour
         ScoreLabel.text = "Distance Travelled :"+ (System.Math.Round((distanceTravelled * 0.1f), 2)).ToString() + " Light Year";
         gameObject.SetActive(true);
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }

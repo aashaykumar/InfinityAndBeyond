@@ -3,11 +3,10 @@ using UnityEngine;
 
 public class HUD : MonoBehaviour
 {
-    public Text DistanceLabel, VelocityLabel;
+    public Text DistanceLabel;
 
-    public void SetValues(float distanceTravelled, float velocity)
+    public void SetValues(float distanceTravelled)
     {
-        DistanceLabel.text = ((int)(distanceTravelled * 10f)).ToString();
-        VelocityLabel.text = ((int)(velocity * 10f)).ToString();
+        DistanceLabel.text = (System.Math.Round((distanceTravelled * 0.1f), 2)).ToString() + " Light Year";
     }
 }

@@ -95,8 +95,6 @@ public class Pipe : MonoBehaviour
 
     public void AlignWith(Pipe pipe)
     {
-        //relativeRotation = Random.Range(0, curveSegmentCount) * 360f / PipeSegmentCount;
-
         transform.SetParent(pipe.transform, false);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.Euler(0f, 0f, -pipe.curveAngle);
@@ -117,7 +115,7 @@ public class Pipe : MonoBehaviour
         
         for (int u = 2, i = iDelta; u <= curveSegmentCount; u++, i += iDelta)
             CreateQuadRing(u * uStep, i);
-        
+
         mesh.vertices = vertices;
     }
 

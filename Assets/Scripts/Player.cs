@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Threading;
 using UnityEngine;
+//using UnityEngine.Windows;
 
 public class Player : MonoBehaviour
 {
@@ -8,13 +8,12 @@ public class Player : MonoBehaviour
     public float StartVelocity;
     public float[] Accelerations; 
     public float RotationVelocity;
-    public float movementVelocity;
     public MainMenu MainMenu;
     public HUD PlayerHUD;
+    public Vector3 InputYZ;
+    public Vector3 movementVelocity;
 
     private Pipe currentPipe;
-
-
     private float acceleration, velocity;
     private float distanceTravelled;
     private float deltaToRotation;
@@ -24,9 +23,9 @@ public class Player : MonoBehaviour
     private float worldRotation;
     private float avatarRotation;
     private float timer;
-    private float avatarPosition;
     private int[] range = { -1, 1 };
     private int rnd = 0;
+    
 
     public void StartGame(int accelerationMode)
     {
@@ -40,8 +39,7 @@ public class Player : MonoBehaviour
         currentPipe = PlayerPipeSystem.SetupFirstPipe();
         SetupCurrentPipe();
         gameObject.SetActive(true);
-        avatarPosition = transform.position.x;
-        PlayerHUD.SetValues(distanceTravelled, velocity);
+        PlayerHUD.SetValues(distanceTravelled);
     }
 
     public void Die()
@@ -87,42 +85,51 @@ public class Player : MonoBehaviour
         PlayerPipeSystem.transform.localRotation = Quaternion.Euler(0f, 0f, systemRotation);
         UpdateAvatarRotation();
         UpdateAvtarPosition();
-        PlayerHUD.SetValues(distanceTravelled, velocity);
+        PlayerHUD.SetValues(distanceTravelled);
     }
 
     private void UpdateAvatarRotation()
     {
         if (timer > 5)
         {
-            
+
             rnd = UnityEngine.Random.Range(0, 2);
-            
             timer = 0;
         }
         else
-
+        {
             timer += Time.deltaTime;
             avatarRotation += RotationVelocity * Time.deltaTime * range[rnd];
-
             if (avatarRotation < 0f)
                 avatarRotation += 360f;
             else if (avatarRotation >= 360f)
                 avatarRotation -= 360f;
-            rotator.localRotation = Quaternion.Euler(avatarRotation, 0f, 0f);
+            world.localRotation = Quaternion.Euler(avatarRotation, 0f, 0f);
+        }
     }
 
     private void UpdateAvtarPosition()
     {
-        avatarPosition += movementVelocity * Input.GetAxis("Horizontal");
-        if (avatarPosition < -0.6f)
+        InputYZ = new Vector3(0f,Input.GetAxisRaw("Vertical"), -(Input.GetAxisRaw("Horizontal")));
+        movementVelocity += 0.01f * InputYZ;
+
+        if (movementVelocity.y < -0.2f)
         {
-            avatarPosition = -0.6f;
+            movementVelocity.y = -0.2f;
         }
-        else if(avatarPosition > 0.6f)
+        else if(movementVelocity.y > 1f)
         {
-            avatarPosition = 0.6f;
+            movementVelocity.y = 1f;
         }
 
-        gameObject.transform.localPosition = new Vector3(0f,0f, avatarPosition);
+        if (movementVelocity.z < -0.6f)
+        {
+                movementVelocity.z = -0.6f;
+        }
+        else if (movementVelocity.z > 0.6f)
+        {
+            movementVelocity.z = 0.6f;
+        }
+        gameObject.transform.localPosition = new Vector3(movementVelocity.x,movementVelocity.y, movementVelocity.z);
     }
 }

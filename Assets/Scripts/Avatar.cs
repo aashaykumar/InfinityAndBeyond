@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class Avatar : MonoBehaviour
 {
     public ParticleSystem Shape;
     public ParticleSystem Trail;
     public ParticleSystem Burst;
+    public PointLight Light;
     public float DeathCountDown = -1f;
 
     private Player player;
@@ -20,8 +22,8 @@ public class Avatar : MonoBehaviour
         {
             Shape.enableEmission = false;
             Trail.enableEmission = false;
-            Burst.Emit(Burst.maxParticles);
-            DeathCountDown = Burst.startLifetime;
+            Burst.Emit(Burst.main.maxParticles);
+            DeathCountDown = Burst.main.startLifetimeMultiplier;
         }
     }
     private void Update()
@@ -29,7 +31,7 @@ public class Avatar : MonoBehaviour
         if (DeathCountDown >= 0f)
         {
             DeathCountDown -= Time.deltaTime;
-
+            Light.range -= 0.1f; 
             if (DeathCountDown <= 0f)
             {
                 DeathCountDown = -1f;
